@@ -10,6 +10,7 @@ const port = Number(process.env.PORT || 3000);
 const openAiKey = process.env.OPENAI_API_KEY;
 const openAiModel = process.env.OPENAI_MODEL || "gpt-4o-mini";
 const aiProvider = process.env.AI_PROVIDER || "openai";
+const host = process.env.HOST || "0.0.0.0";
 
 app.use(express.json({ limit: "1mb" }));
 app.use(express.static(__dirname));
@@ -102,6 +103,7 @@ app.post("/api/analyze-meeting", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
+app.listen(port, host, () => {
   console.log(`VoiceScribe server is running on http://localhost:${port}`);
+  console.log(`LAN access is enabled on port ${port}. Remote microphone access requires HTTPS.`);
 });

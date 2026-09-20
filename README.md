@@ -77,6 +77,18 @@ The backend sends the transcript to the configured external AI provider only if 
    ```
 5. Open `http://localhost:3000` in your browser.
 
+## Using another device
+
+The Web Speech API requires a secure context for microphone access:
+
+- `http://localhost:3000` works on the computer running the server.
+- A phone, tablet, or another computer must use an **HTTPS** URL.
+- A plain `http://192.168.x.x:3000` LAN address will usually be blocked by the browser for microphone access.
+
+For local-network testing, the server listens on all network interfaces by default (`HOST=0.0.0.0`). You still need HTTPS, such as a trusted HTTPS tunnel or a local HTTPS reverse proxy. Also allow the port through the computer firewall and grant microphone permission to the browser.
+
+If the app is deployed as a static GitHub Pages site, speech recognition can work over HTTPS, but `/api/analyze-meeting` is not hosted by GitHub Pages. Deploy the Node server separately and configure the frontend API URL before using Meeting Intelligence there.
+
 ## Browser compatibility
 
 The Web Speech API works best in:

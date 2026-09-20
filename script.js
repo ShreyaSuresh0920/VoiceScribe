@@ -67,6 +67,20 @@ function showError(message) {
   errorMessage.textContent = message;
 }
 
+function getMicrophoneAccessError() {
+  const isLocalhost = ["localhost", "127.0.0.1", "::1"].includes(window.location.hostname);
+
+  if (!isLocalhost && !window.isSecureContext) {
+    return "Microphone access requires a secure HTTPS link on other devices. Open the app using HTTPS, or use localhost on this computer.";
+  }
+
+  if (!SpeechRecognition) {
+    return "Speech recognition is not supported in this browser. Please use Google Chrome or Microsoft Edge.";
+  }
+
+  return "";
+}
+
 function showMeetingError(message) {
   meetingError.textContent = message;
 }
@@ -212,8 +226,9 @@ function initializeRecognition() {
 }
 
 function startRecognition() {
-  if (!SpeechRecognition) {
-    showError("Speech recognition is not supported in this browser. Please use a supported browser such as Google Chrome or Microsoft Edge.");
+  const microphoneAccessError = getMicrophoneAccessError();
+  if (microphoneAccessError) {
+    showError(microphoneAccessError);
     setStatus("error", "Speech recognition unavailable");
     return;
   }
@@ -546,8 +561,9 @@ function handleTaskActionClick(event) {
 }
 
 recordButton.addEventListener("click", () => {
-  if (!SpeechRecognition) {
-    showError("Speech recognition is not supported in this browser. Please use a supported browser such as Google Chrome or Microsoft Edge.");
+  const microphoneAccessError = getMicrophoneAccessError();
+  if (microphoneAccessError) {
+    showError(microphoneAccessError);
     setStatus("error", "Speech recognition unavailable");
     return;
   }
