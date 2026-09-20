@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="VoiceScribe is a browser-based voice-to-text transcription app with an AI meeting assistant layer."
+    />
+    <title>VoiceScribe</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <p class="eyebrow">Speech to text</p>
+        <h1>VoiceScribe</h1>
+        <p class="subtitle">Convert your voice into text instantly</p>
+      </header>
+
+      <div class="tab-bar" aria-label="Main application sections">
+        <button class="tab-button active" data-tab="transcription" type="button">🎙️ Transcription</button>
+        <button class="tab-button" data-tab="meeting" type="button">🧠 Meeting Intelligence</button>
+      </div>
+
+      <section id="transcriptionTab" class="tab-panel active" aria-label="Voice transcription controls">
+        <div class="panel">
+          <div class="field-group">
+            <label for="languageSelect">Recognition Language</label>
+            <select id="languageSelect" aria-label="Select recognition language">
+              <option value="en-IN">English (India) - en-IN</option>
+              <option value="en-US">English (US) - en-US</option>
+              <option value="en-GB">English (UK) - en-GB</option>
+              <option value="hi-IN">Hindi - hi-IN</option>
+              <option value="te-IN">Telugu - te-IN</option>
+              <option value="mr-IN">Marathi - mr-IN</option>
+              <option value="ta-IN">Tamil - ta-IN</option>
+              <option value="kn-IN">Kannada - kn-IN</option>
+              <option value="bn-IN">Bengali - bn-IN</option>
+            </select>
+          </div>
+
+          <div class="recording-wrap">
+            <button
+              id="recordButton"
+              class="microphone-button"
+              type="button"
+              aria-label="Start recording"
+            >
+              <span class="microphone-icon" aria-hidden="true">🎙️</span>
+              <span class="button-text">Start Recording</span>
+            </button>
+          </div>
+
+          <div id="recordingStatus" class="status ready" aria-live="polite">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span class="status-text">Ready to record</span>
+          </div>
+
+          <section class="transcription-card" aria-label="Speech transcription output">
+            <label class="card-label" for="transcriptionOutput">Transcription</label>
+            <textarea
+              id="transcriptionOutput"
+              readonly
+              spellcheck="false"
+              placeholder="Your transcription will appear here..."
+            ></textarea>
+
+            <div class="interim-box" aria-live="polite">
+              <span class="interim-label">Interim text:</span>
+              <span id="interimText">—</span>
+            </div>
+          </section>
+
+          <div class="stats" aria-live="polite">
+            <span>Words: <strong id="wordCount">0</strong></span>
+            <span>Characters: <strong id="charCount">0</strong></span>
+          </div>
+
+          <div class="action-row">
+            <button id="clearButton" class="action-button" type="button">Clear</button>
+            <button id="copyButton" class="action-button" type="button">Copy</button>
+            <button id="downloadButton" class="action-button" type="button">Download TXT</button>
+          </div>
+
+          <div id="errorMessage" class="error-message" aria-live="assertive"></div>
+
+          <p class="privacy-note">
+            Microphone access is required for speech recognition. Speech recognition availability and processing may depend on your browser and its speech service.
+          </p>
+
+          <p id="compatibilityInfo" class="compatibility-info">
+            This app uses the Web Speech API, which works best in Google Chrome and Microsoft Edge.
+          </p>
+        </div>
+      </section>
+
+      <section id="meetingTab" class="tab-panel" aria-label="Meeting intelligence dashboard" hidden>
+        <div class="panel meeting-panel">
+          <div class="meeting-header">
+            <h2>🧠 Meeting Intelligence</h2>
+            <p>Analyze the final transcript into summaries, action items, deadlines, decisions, and next steps.</p>
+          </div>
+
+          <div class="meeting-actions">
+            <button id="analyzeButton" class="primary-button" type="button">Analyze Meeting</button>
+            <button id="exportButton" class="action-button" type="button">Export Meeting Notes</button>
+          </div>
+
+          <div id="meetingStatus" class="meeting-status" aria-live="polite">No analysis generated yet.</div>
+          <div id="meetingError" class="error-message" aria-live="assertive"></div>
+
+          <div class="privacy-box">
+            <strong>Privacy Notice:</strong> Your raw transcript remains stored in the browser until you export or clear it. If an external AI provider is configured, the transcript is sent only when you click Analyze Meeting.
+          </div>
+
+          <div class="meeting-grid">
+            <article class="meeting-card summary-card">
+              <h3>📝 Meeting Summary</h3>
+              <div id="summaryOutput" class="meeting-output empty-state">No summary available yet.</div>
+            </article>
+
+            <article class="meeting-card action-items-card">
+              <h3>✅ Action Items</h3>
+              <div id="actionItemsOutput" class="meeting-output empty-state">No action items detected yet.</div>
+            </article>
+
+            <article class="meeting-card">
+              <h3>📅 Deadlines</h3>
+              <div id="deadlinesOutput" class="meeting-output empty-state">No deadlines detected yet.</div>
+            </article>
+
+            <article class="meeting-card">
+              <h3>🎯 Decisions</h3>
+              <div id="decisionsOutput" class="meeting-output empty-state">No decisions captured yet.</div>
+            </article>
+
+            <article class="meeting-card">
+              <h3>🔜 Next Steps</h3>
+              <div id="nextStepsOutput" class="meeting-output empty-state">No next steps identified yet.</div>
+            </article>
+
+            <article class="meeting-card">
+              <h3>📌 Important Points</h3>
+              <div id="importantPointsOutput" class="meeting-output empty-state">No important points captured yet.</div>
+            </article>
+
+            <article class="meeting-card full-span">
+              <h3>❓ Unresolved Questions</h3>
+              <div id="unresolvedQuestionsOutput" class="meeting-output empty-state">No unresolved questions detected yet.</div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>

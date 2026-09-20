@@ -1,0 +1,15 @@
+{
+  "name": "voicescribe-meeting-assistant",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Voice-to-text transcription app with a meeting intelligence analysis layer.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
