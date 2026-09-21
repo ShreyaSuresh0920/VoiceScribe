@@ -298,6 +298,7 @@ select:focus {
 }
 
 .privacy-note,
+.punctuation-tip,
 .compatibility-info {
   margin: 14px 0 0;
   color: var(--muted);

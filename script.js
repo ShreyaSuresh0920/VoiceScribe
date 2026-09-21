@@ -112,6 +112,46 @@ function renderTranscript() {
   updateCounts();
 }
 
+function formatSpokenPunctuation(text) {
+  let formattedText = text.trim();
+
+  const punctuationCommands = [
+    [/\bnew paragraph\b/gi, "\n\n"],
+    [/\bnew line\b/gi, "\n"],
+    [/\bquestion mark\b/gi, "?"],
+    [/\bexclamation mark\b/gi, "!"],
+    [/\bexclamation point\b/gi, "!"],
+    [/\bfull stop\b/gi, "."],
+    [/\bperiod\b/gi, "."],
+    [/\bcomma\b/gi, ","],
+    [/\bcolon\b/gi, ":"],
+    [/\bsemicolon\b/gi, ";"]
+  ];
+
+  punctuationCommands.forEach(([command, punctuation]) => {
+    formattedText = formattedText.replace(command, punctuation);
+  });
+
+  return formattedText
+    .replace(/\s+([,.;:!?])/g, "$1")
+    .replace(/([,.;:!?])(?=\S)/g, "$1 ")
+    .replace(/[ \t]+/g, " ")
+    .replace(/ *\n */g, "\n")
+    .trim();
+}
+
+function appendTranscriptSegment(segment) {
+  const formattedSegment = formatSpokenPunctuation(segment);
+
+  if (!formattedSegment) {
+    return;
+  }
+
+  finalTranscript = finalTranscript
+    ? `${finalTranscript.replace(/\s+$/, "")} ${formattedSegment}`
+    : formattedSegment;
+}
+
 function updateRecordButtonState() {
   const isSupported = Boolean(SpeechRecognition);
 
@@ -172,9 +212,7 @@ function initializeRecognition() {
       const transcriptText = currentResult[0].transcript.trim();
 
       if (currentResult.isFinal) {
-        if (transcriptText) {
-          finalTranscript = finalTranscript ? `${finalTranscript} ${transcriptText}` : transcriptText;
-        }
+        appendTranscriptSegment(transcriptText);
       } else if (transcriptText) {
         currentInterim = transcriptText;
       }

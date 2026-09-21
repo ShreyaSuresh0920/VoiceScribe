@@ -46,6 +46,7 @@ The transcription functionality remains in `script.js` and uses `window.SpeechRe
 - dynamic `recognition.lang` updates from the language dropdown
 - `finalTranscript` storing the completed speech text
 - `interimTranscript` showing the active partial recognition live
+- Spoken commands such as "comma", "full stop", "question mark", "new line", and "new paragraph" are converted into punctuation in the final transcript
 
 ## Meeting Intelligence flow
 
